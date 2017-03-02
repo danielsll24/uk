@@ -60,7 +60,7 @@ procesa <- function(X = NULL, incu=NULL,colaño=NULL){#Incu es para pasar el dat
   X$shoth <- X$voth/X$vtot
   
   X <- X[duplicated(X$n)==FALSE,]
-  X <- X[,c("n","constituency","region","norirl","status","electorate","turnout","ncand","vtot","v1","v2","v3","voth","sh1","sh2","sh3","shoth","c1","c2","c3","p1","p2","p3")]
+  X <- X[,c("n","constituency","region","norirl","status","electorate","turnout","ncand","vtot","v1","v2","v3","voth","sh1","sh2","sh3","shoth","c1","c2","c3","p1","p2","p3","byEl")]
   
   X$i1<-is.incumbent(X$c1,incu,colaño)
   X$i2<-is.incumbent(X$c2,incu,colaño)
@@ -71,7 +71,8 @@ procesa <- function(X = NULL, incu=NULL,colaño=NULL){#Incu es para pasar el dat
   places<-spread(Y,pl,name)#Primer, segunto, tercer.... estan acomodado por columnas de cada distrito
   X$ioth<-as.numeric(apply( apply(places[,4:length(places[1,])], 2 , is.incumbent, incu=incu,colaño=colaño),1,sum)>0)
   X$byEl<-as.numeric(pmatch(X$constituency, by_election[,2*colaño-1], nomatch=0)>0)
-  return(X)
+  X$ibyEl<-is.incumbent(X$byEl,incu,colaño)
+      return(X)
 }
 
 # prepara datos de la eleccion de febrero
